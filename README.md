@@ -1,53 +1,107 @@
 # Enterprise Task Management System
-Built by Prasad — Java 17, Spring Boot 3, PostgreSQL, React, Docker, JWT, Swagger
-3 microservices: auth-service (8081), employee-service (8082), task-service (8083)
-Run with: docker-compose up --build
 
-Simple Task Management System
-A full-stack web application built with React frontend and Spring Boot microservices backend, using PostgreSQL as the database.
+> Built by **Prasad Sasle** — Java 17 | Spring Boot 3 | PostgreSQL | React | Docker | JWT | Swagger
 
-🚀 Tech Stack
-Frontend
-React - Frontend framework
-Vite - Build tool and development server
-Backend
-Spring Boot - Java framework for microservices
-Maven - Dependency management
-Apache Tomcat - Application server
-Database
-PostgreSQL - Primary database (running in Docker container)
-Architecture
-Microservices Architecture with 3 independent services:
-Auth Service (Port 8081)
-Employee Service (Port 8082)
-Task Service (Port 8083)
-📸 Screenshots
-Main Dashboard
-<img width="838" height="582" alt="Screenshot 2026-04-12 at 4 32 45 AM" src="https://github.com/user-attachments/assets/074d69a7-dd86-4e10-9576-16e91274a41e" />
+A full-stack enterprise task management application built with a **microservices architecture**.
+Designed with security, scalability, and maintainability in mind — directly relevant to banking and enterprise environments.
 
-Application Overview
+---
 
-<img width="850" height="537" alt="Screenshot 2026-04-12 at 4 33 27 AM" src="https://github.com/user-attachments/assets/7a93f8f1-d95f-47e3-b76f-90ffba14be9f" />
+## 📸 Screenshots
 
-🏗️ Project Structure
+### Main Dashboard
+<img width="838" height="582" alt="Main Dashboard" src="https://github.com/user-attachments/assets/074d69a7-dd86-4e10-9576-16e91274a41e" />
+
+### Application Overview
+<img width="850" height="537" alt="Application Overview" src="https://github.com/user-attachments/assets/7a93f8f1-d95f-47e3-b76f-90ffba14be9f" />
+
+---
+
+## 🚀 Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Backend | Java 17, Spring Boot 3.x, Spring Security |
+| Auth | JWT (JSON Web Tokens) — Role-Based Access Control |
+| Database | PostgreSQL, Spring Data JPA, Hibernate |
+| Frontend | React 19, Tailwind CSS, Axios |
+| DevOps | Docker, Docker Compose, GitHub |
+| API Docs | Swagger / OpenAPI 3.0 |
+
+---
+
+## 🏗️ Architecture — 3 Microservices
+
+| Service | Port | Responsibility |
+|---------|------|----------------|
+| auth-service | 8081 | User registration, login, JWT token generation |
+| employee-service | 8082 | Employee CRUD, profile management |
+| task-service | 8083 | Task CRUD, assignment, status, pagination, filtering |
+
+```
 project-root/
 ├── frontend/
 │   ├── src/
-│   ├── .env
+│   │   ├── components/       # Login, TaskList, TaskForm, EmployeeList
+│   │   └── services/         # auth.js, task.js, employee.js
 │   └── package.json
 ├── backend/
-│   ├── auth-service/
-│   │   └── src/main/resources/application.properties
-│   ├── employee-service/
-│   │   └── src/main/resources/application.properties
-│   └── task-service/
-│       └── src/main/resources/application.properties
-├── LICENSE.txt
-├── .gitignore
+│   ├── auth-service/         # Port 8081 — JWT Auth
+│   ├── employee-service/     # Port 8082 — Employee Management
+│   └── task-service/         # Port 8083 — Task Management
+├── docker-compose.yml
 └── README.md
-🔐 Environment Variables
-Create a .env file in your project root with the following variables:
+```
 
+---
+
+## ✨ Features
+
+- 🔐 JWT-based authentication with **Role-Based Access Control (ADMIN / EMPLOYEE)**
+- 👤 User registration with role assignment (ADMIN or EMPLOYEE)
+- ✅ Task lifecycle management: `TODO` → `IN_PROGRESS` → `DONE`
+- 📋 Assign tasks to employees, filter by status, paginate results
+- 🚫 ADMIN-only DELETE protection enforced at the API level
+- 🔒 Protected React routes with JWT token expiry handling
+- 📄 Swagger UI API documentation on each service
+- 🐳 Full Docker Compose setup for one-command deployment
+
+---
+
+## 📝 API Endpoints
+
+### Auth Service (Port 8081)
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| POST | /auth/register | Public | Register with role: ADMIN or EMPLOYEE |
+| POST | /auth/login | Public | Login — returns JWT token + role |
+
+### Employee Service (Port 8082)
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| GET | /employees | ADMIN/EMPLOYEE | Get all employees |
+| POST | /employees | ADMIN/EMPLOYEE | Create employee |
+| PUT | /employees/{id} | ADMIN/EMPLOYEE | Update employee |
+| DELETE | /employees/{id} | ADMIN only | Delete employee |
+
+### Task Service (Port 8083)
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| GET | /tasks | ADMIN/EMPLOYEE | Get all tasks |
+| GET | /tasks/paginated | ADMIN/EMPLOYEE | Paginated task list |
+| GET | /tasks/filter?status= | ADMIN/EMPLOYEE | Filter by status |
+| GET | /tasks/employee/{id} | ADMIN/EMPLOYEE | Tasks by employee |
+| POST | /tasks | ADMIN/EMPLOYEE | Create task |
+| PUT | /tasks/{id} | ADMIN/EMPLOYEE | Update task |
+| DELETE | /tasks/{id} | **ADMIN only** | Delete task |
+
+---
+
+## 🔐 Environment Variables
+
+Create a `.env` file in your project root:
+
+```env
 # Database Configuration
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
@@ -58,139 +112,111 @@ DB_PORT=5432
 VITE_AUTH_API_URL=http://localhost:8081/auth
 VITE_EMPLOYEE_API_URL=http://localhost:8082/employees
 VITE_TASK_API_URL=http://localhost:8083/tasks
-Important: Never commit your .env file to version control. Add it to your .gitignore file:
+```
 
-.env
-*.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-🛠️ Prerequisites
-Before running this project, make sure you have the following installed:
+> Never commit your `.env` file — it is already in `.gitignore`
 
-Java 17+
-Node.js 16+ & npm
-Maven 3.6+
-Docker (for PostgreSQL database only)
-IntelliJ IDEA (recommended)
-🚀 Getting Started
-1. Clone the Repository
-git clone <your-repository-url>
-cd <project-directory>
-2. Database Setup
-Start your PostgreSQL database using Docker:
+---
 
-# Start PostgreSQL container
+## 🛠️ Prerequisites
+
+- Java 17+
+- Node.js 16+ & npm
+- Maven 3.6+
+- Docker & Docker Compose
+
+---
+
+## 🚀 Getting Started
+
+### Option 1 — Docker (Recommended)
+
+```bash
+git clone https://github.com/prasadsasle/enterprise-task-manager.git
+cd enterprise-task-manager
+docker-compose up --build
+```
+
+- Frontend: http://localhost:3000
+- Auth API Docs: http://localhost:8081/swagger-ui/index.html
+- Task API Docs: http://localhost:8083/swagger-ui/index.html
+
+---
+
+### Option 2 — Manual Setup
+
+**1. Start PostgreSQL**
+```bash
 docker run --name postgres-db -e POSTGRES_PASSWORD=your_password -p 5432:5432 -d postgres
+```
 
-# Or if you already have a PostgreSQL container
-docker start postgres-db
-3. Database Configuration
-Connect to your PostgreSQL instance:
-
-Host: localhost
-Port: 5432
-Username: your_username
-Password: your_password
-Create the required databases:
-
+**2. Create Databases**
+```sql
 CREATE DATABASE auth_db;
 CREATE DATABASE employee_db;
 CREATE DATABASE task_db;
-In your database management tool, click Test and then Apply to ensure the connection is working.
+```
 
-4. Backend Setup
-Configure Application Properties
-Each microservice has its own application.properties file:
+**3. Configure application.properties for each service**
 
-Auth Service (/auth-service/src/main/resources/application.properties):
-
+Auth Service:
+```properties
 spring.application.name=auth-service
 server.port=8081
 spring.datasource.url=jdbc:postgresql://localhost:5432/auth_db
 spring.datasource.username=${DB_USERNAME}
 spring.datasource.password=${DB_PASSWORD}
-Employee Service (/employee-service/src/main/resources/application.properties):
+```
 
+Employee Service:
+```properties
 spring.application.name=employee-service
 server.port=8082
 spring.datasource.url=jdbc:postgresql://localhost:5432/employee_db
 spring.datasource.username=${DB_USERNAME}
 spring.datasource.password=${DB_PASSWORD}
-Task Service (/task-service/src/main/resources/application.properties):
+```
 
+Task Service:
+```properties
 spring.application.name=task-service
 server.port=8083
 spring.datasource.url=jdbc:postgresql://localhost:5432/task_db
 spring.datasource.username=${DB_USERNAME}
 spring.datasource.password=${DB_PASSWORD}
-Run Backend Services
-Open IntelliJ IDEA and import the project
+```
 
-IntelliJ will automatically detect this as a Maven project and configure Tomcat as the server
+**4. Run Backend Services**
+```bash
+# Terminal 1
+cd backend/auth-service && mvn spring-boot:run
 
-Start each microservice one by one in the following order:
+# Terminal 2
+cd backend/employee-service && mvn spring-boot:run
 
-# Terminal 1 - Auth Service
-cd auth-service
-mvn spring-boot:run
+# Terminal 3
+cd backend/task-service && mvn spring-boot:run
+```
 
-# Terminal 2 - Employee Service  
-cd employee-service
-mvn spring-boot:run
-
-# Terminal 3 - Task Service
-cd task-service
-mvn spring-boot:run
-Or run them directly from IntelliJ using the Spring Boot run configuration.
-
-Verify services are running:
-
-Auth Service: http://localhost:8081
-Employee Service: http://localhost:8082
-Task Service: http://localhost:8083
-5. Frontend Setup
-Environment Configuration
-Create a .env file in the frontend directory:
-
-VITE_AUTH_API_URL=http://localhost:8081/auth
-VITE_EMPLOYEE_API_URL=http://localhost:8082/employees
-VITE_TASK_API_URL=http://localhost:8083/tasks
-Run Frontend
-# Navigate to frontend directory
-cd frontend
-
-# Install dependencies
+**5. Run Frontend**
+```bash
+cd frontend/task-tracker-ui
 npm install
-
-# Start development server
 npm run dev
-The frontend will be available at http://localhost:5173 (or the port shown in your terminal).
+```
 
-🔧 Development Workflow
-Starting the Application
-Start PostgreSQL Docker container
-Connect to database and verify connection
-Start backend services (ports 8081, 8082, 8083)
-Start frontend development server
-Making Changes
-Backend: Changes will be automatically reloaded if using Spring Boot DevTools
-Frontend: Vite provides hot module replacement for instant updates
-📝 API Endpoints
-Auth Service (Port 8081)
-POST /auth/login - User authentication
-POST /auth/register - User registration
-Employee Service (Port 8082)
-GET /employees - Get all employees
-POST /employees - Create new employee
-PUT /employees/{id} - Update employee
-DELETE /employees/{id} - Delete employee
-Task Service (Port 8083)
-GET /tasks - Get all tasks
-POST /tasks - Create new task
-PUT /tasks/{id} - Update task
-DELETE /tasks/{id} - Delete task
+Frontend available at: http://localhost:5173
 
+---
 
+## 👤 Author
 
+**Prasad Sasle**
+- GitHub: [@prasadsasle](https://github.com/prasadsasle)
+- Built for enterprise environments with JP Morgan-style architecture
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
