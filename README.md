@@ -213,7 +213,7 @@ Frontend available at: http://localhost:5173
 
 **Prasad Sasle**
 - GitHub: [@prasadsasle](https://github.com/prasadsasle)
-- Built for enterprise environments with JP Morgan-style architecture
+- Built for enterprise environments 
 
 ---
 
